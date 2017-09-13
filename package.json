@@ -1,0 +1,18 @@
+{
+  "name": "d11-foo",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "nodemon src/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.4",
+    "mocha": "^3.5.3",
+    "nodemon": "^1.12.0",
+    "pug": "^2.0.0-rc.4"
+  }
+}

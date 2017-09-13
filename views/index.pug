@@ -1,0 +1,20 @@
+html
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no")
+    title
+      | Dream11 - String Factory
+    link(rel='stylesheet' href='/app.css')
+  body
+    div
+      div.container
+        div.row
+          each edge, i in node.children
+            div.col
+              a.link(href='/' + edge)
+                = edge.slice(0, 4)
+
+        div.row
+          div.col
+            div.codes
+              each val in node.codes
+                h1= val
