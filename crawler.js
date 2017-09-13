@@ -16,5 +16,3 @@ module.exports = url =>
      */
     reject(new Error('NotImplemented'))
   })
-
-module.exports = require('../d11/crawler')
