@@ -111,9 +111,7 @@ You can also [test] your code using `npm test`. The test cases run on multiple s
 The team would be glad to assist you in setting up the project on your computer. Feel free to stop by and ask questions.
 
 # Judging Criteria
-Once your tests pass we will benchmark your code against ours on various versions of the website. If your crawler beat us in at least three of five, you win! 
-
-To be fair we will publish the test cases online after the conference is over.
+Once your tests pass we will benchmark your code against ours on various versions of the website. If your crawler beats us in at least three of five, you win!
 
 # Solution
 We would be announcing our solution over at our twitter handle — [@d11engg](https://twitter.com/D11Engg) after the conference is over.
@@ -123,6 +121,8 @@ We would be announcing our solution over at our twitter handle — [@d11engg](ht
 - **What does lexicographically smallest string mean?**
   The lexicographically smallest string would be the first string in an english dictionary where all the words are sorted in alphabetical order. Eg: `a < b` or `aa < ab`.
 
+- **Can we libraries?**
+  Sure go ahead!
 
 Please don't hesitate to get in touch with the team or shoot us a query directly on [d11engg](https://twitter.com/D11Engg).
 - **Can we use libraries?**
