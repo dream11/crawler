@@ -8,7 +8,7 @@ const assert = require('assert')
 const graph4 = require('../public/graph-4.json')
 const graph100 = require('../public/graph-100.json')
 const graph1000 = require('../public/graph-1000.json')
-const {startServer, stopServer} = require('../src/lib')
+const {startServer, stopServer} = require('../lib')
 
 const crawl = require('../crawler')
 

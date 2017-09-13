@@ -123,8 +123,6 @@ We would be announcing our solution over at our twitter handle — [@d11engg](ht
 - **What does lexicographically smallest string mean?**
   The lexicographically smallest string would be the first string in an english dictionary where all the words are sorted in alphabetical order. Eg: `a < b` or `aa < ab`.
 
-- **How do I know when to stop?**
-  *HINT: It is essentially a Graph Traversal problem, the only difference is that — going from one node to another requires an I/O operation.*
 
 Please don't hesitate to get in touch with the team or shoot us a query directly on [d11engg](https://twitter.com/D11Engg).
 - **Can we use libraries?**
