@@ -6,10 +6,10 @@
 
 const express = require('express')
 const path = require('path')
-const app = express()
 
 exports.startServer = ({port, graph, delay}) =>
   new Promise(resolve => {
+    const app = express()
     const firstNode = Object.values(graph)[0]
     app.set('view engine', 'pug')
     app.set('views', path.resolve(__dirname, './views'))
@@ -28,7 +28,4 @@ exports.startServer = ({port, graph, delay}) =>
     })
   })
 
-exports.stopServer = server =>
-  new Promise(resolve => {
-    server.close(resolve)
-  })
+exports.stopServer = server => new Promise(resolve => server.close(resolve))

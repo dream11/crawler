@@ -13,12 +13,15 @@ const {startServer, stopServer} = require('../src/lib')
 const crawl = require('../crawler')
 
 describe('crawler', function() {
-  this.timeout(60 * 1000)
   context('for website with 1000 pages', () => {
-    beforeEach(async function() {
-      this.server = await startServer({port: 8081, graph: graph1000, delay: 10})
+    before(async function() {
+      this.server = await startServer({
+        port: 8081,
+        graph: graph1000,
+        delay: 100
+      })
     })
-    afterEach(async function() {
+    after(async function() {
       await stopServer(this.server)
     })
 
