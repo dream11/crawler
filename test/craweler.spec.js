@@ -10,7 +10,7 @@ const graph100 = require('../public/graph-100.json')
 const graph1000 = require('../public/graph-1000.json')
 const {startServer, stopServer} = require('../src/lib')
 
-const crawl = require('../private/crawler')
+const crawl = require('../crawler')
 
 describe('crawler', function() {
   this.timeout(60 * 1000)
