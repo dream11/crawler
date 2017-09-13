@@ -37,10 +37,10 @@ In the above case I first load page `a0` I extract all the strings in white from
 ```patch
 {
   strings: [
-  'rga',
-  'abd',
-  'ebd',
-  'bde'
++ 'rga',
++ 'abd',
++ 'ebd',
++ 'bde'
   ]
 }
 ```
