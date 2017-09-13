@@ -9,9 +9,9 @@
  * @param url
  * @return {Promise.<string>}
  */
-module.exports = (url) => {
-  /**
+module.exports = url =>
+  new Promise((resolve, reject) => {
+    /**
    * TODO: Write your high performance code here.
    */
-  return Promise.reject('Not Implemented')
-}
+  })
