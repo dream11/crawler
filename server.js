@@ -10,6 +10,7 @@ const app = express()
 const port = 8080
 const delay = 1000
 const firstNode = Object.values(graph)[0]
+
 app.set('view engine', 'pug')
 app.set('views', path.resolve(__dirname, './views'))
 app.use(express.static('public'))
@@ -20,6 +21,6 @@ app.get('/:hash', (req, res, next) => {
   else next()
 })
 
-app.listen(port, () =>
+module.exports = app.listen(port, () =>
   console.log(`Server started — http://localhost:${port}`)
 )
