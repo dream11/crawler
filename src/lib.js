@@ -5,13 +5,14 @@
 'use strict'
 
 const express = require('express')
+const path = require('path')
 const app = express()
 
 exports.startServer = ({port, graph, delay}) =>
   new Promise(resolve => {
     const firstNode = Object.values(graph)[0]
     app.set('view engine', 'pug')
-    app.set('views', './views')
+    app.set('views', path.resolve(__dirname, './views'))
     app.use(express.static('public'))
     app.get('/', (req, res) =>
       res.render('index', {cache: true, node: firstNode})
