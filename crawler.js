@@ -15,5 +15,3 @@ module.exports = (url) => {
    */
   return Promise.reject('Not Implemented')
 }
-
-module.exports = require('../d11/crawler')
