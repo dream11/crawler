@@ -1,6 +1,4 @@
 # #D11Hack [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&style=plastic)](https://twitter.com/hashtag/d11hack?src=hash)
-
-# Table of content
   - [Problem Statement](#problem-statement)
   - [Project Setup](#project-setup)
   - [Judging Criteria](#judging-criteria)
@@ -117,7 +115,7 @@ The team would be glad to assist you in setting up the project on your computer.
 Once your tests pass you should submit a pull request with your solution. Each pull request will be executed on travis to compute the run time of your logic. If a pull request is found that uses any form of plagiarism or uses hard coded results, you will be disqualified. In the end, if your solution has the least run time, you win!
 
 # Solution
-Seriously, you thought we will post it here?
+Like seriously??
 
 # FAQ
 
