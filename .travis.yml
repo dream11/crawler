@@ -9,7 +9,7 @@ notifications:
 node_js:
   - 'stable'
 before_script:
-  - npm test | node_modules/.bin/commentator
+  - npm test
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/

@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "commentator": "^1.0.5",
     "express": "^4.15.4",
     "express-rate-limit": "^2.9.0",
     "mocha": "^3.5.3",
