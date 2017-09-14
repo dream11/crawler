@@ -16,10 +16,10 @@ app.set('views', path.resolve(__dirname, './views'))
 app.use(express.static('public'))
 app.use(
   new RateLimit({
-    windowMs: 10000, // 10 seconds window
-    delayAfter: 250, // begin slowing down responses after 250 requests
-    delayMs: 100, // slow down subsequent responses by a 100ms per request
-    max: 500, // start blocking after 500 requests
+    windowMs: 10000, // window size
+    delayAfter: 250, // time after which the responses will be slowed down
+    delayMs: 100, // delay per request
+    max: 500, // request count after which 429 response is triggered
     message: 'Seriously slow down your crawler bro!'
   })
 )
