@@ -8,7 +8,7 @@ const path = require('path')
 const RateLimit = require('express-rate-limit')
 
 const app = express()
-const port = 8080
+const port = process.env.PORT || 8080
 const firstNode = Object.values(graph)[0]
 
 app.set('view engine', 'pug')
@@ -30,6 +30,11 @@ app.get('/:hash', (req, res, next) => {
   else next()
 })
 
-module.exports = app.listen(port, () =>
-  console.log(`Server started — http://localhost:${port}`)
+exports.server = new Promise(resolve =>
+  app.listen(port, () => {
+    resolve(app)
+    console.log(`Server started — http://localhost:${port}`)
+  })
 )
+
+exports.stop = () => new Promise(resolve => app.close(resolve))

@@ -4,23 +4,24 @@
 
 ;('use strict')
 
+const port = (process.env.PORT = process.env.PORT || 8081)
+
+const {start, stop} = require('../server')
 const assert = require('assert')
 const crawl = require('../crawler')
+const OneMin = 60 * 1000
 
 /**
  * crawl() is being tested for correctness
  */
-async function main() {
-  const time = Date.now()
 
-  const actual = await crawl('http://localhost:8080')
-  const expected = 'bcgsqo'
-  assert.strictEqual(actual, expected)
-
-  console.log('ok!')
-  console.log(`Total Time: ${(Date.now() - time) / 1000}s`)
-}
-
-main().catch(err => {
-  throw err
+describe('string-factory.com', () => {
+  beforeEach(async () => await start)
+  afterEach(async () => await stop)
+  it('crawl()', async function() {
+    this.timeout(OneMin)
+    const actual = await crawl(`http://localhost:${port}`)
+    const expected = 'bcgsqo'
+    assert.strictEqual(actual, expected)
+  })
 })
