@@ -7,29 +7,31 @@
 module.exports = function (url) {
 	return new Promise(function (resolve) {
 		let request = require('request');
-		let cheerio = require('cheerio');
 		let bestString = "zzzzzz";
-		let visitedUrls = [];
+		let visitedUrls = {};
 		let count = { urlsFetched: 0, callbacksReturned: 0 };
 		
 		function fetchUrlAndSaveStrings(pathUrl) {
 			count.urlsFetched += 1;
 			request(url + pathUrl, function (error, response, html) {
 				if (error) { count.urlsFetched -= 1; return; }
-				let $ = cheerio.load(html);
 				
-				if (!visitedUrls.includes(pathUrl)) {
-					$(".codes").children().each(function (index, elm) {
-						const str = $(elm).text();
-						if (str < bestString) { bestString = str; }
-						visitedUrls.push(pathUrl);
-					});
+				if (!visitedUrls[pathUrl]) {
+					const h1Matches = html.match(/<h1>(.*?)<\/h1>/g);
+					if (h1Matches) {
+						h1Matches.forEach(thisH1Tag => {
+							const str = thisH1Tag.slice(4, 10);
+							if (str < bestString) { bestString = str; }
+							visitedUrls[pathUrl] = true;
+						});
+					}
 					
-					const links = $("a.link");
-					if (links.length !== 0) {
-						links.each(function (index, thisAnchorEl) {
-							const thisUrl = $(thisAnchorEl).attr("href");
-							!visitedUrls.includes(thisUrl) && fetchUrlAndSaveStrings(thisUrl);
+					const hrefMatches = html.match(/href="(.*?)"/g);
+					if (hrefMatches) {
+						hrefMatches.forEach((thisHrefStr, index) => {
+							if (index === 0) { return; }
+							const thisUrl = thisHrefStr.slice(6, -1);
+							!visitedUrls[thisUrl] && fetchUrlAndSaveStrings(thisUrl);
 						});
 					}
 				}
