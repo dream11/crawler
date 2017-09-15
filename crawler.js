@@ -1,11 +1,10 @@
 'use strict'
 
-const fetch = require('node-fetch')
+const { throttle } = require('lodash')
+const { get } = require('axios')
 
 async function parsePage (url) {
-  let response = await fetch(url)
-  let data = await response.text()
-
+  let { data } = await get(url)
   data = data.slice(264, -96)
 
   let code
@@ -31,10 +30,9 @@ async function parsePage (url) {
 module.exports = url => new Promise((resolve, reject) => {
   const urlsParsed = {}
   const domain = url
-  const promises = []
   let result
 
-  const computeResults = (url) => new Promise((resolve, reject) => {
+  const computeResults = throttle((url) => new Promise((resolve, reject) => {
     if (urlsParsed[url]) resolve(undefined)
 
     urlsParsed[url] = true
@@ -43,17 +41,12 @@ module.exports = url => new Promise((resolve, reject) => {
       ({ code, urls }) => {
         result = code ? (result < code ? result : code) : result
 
-        console.log(Object.keys(urlsParsed).length)
+        console.log(result)
 
-        promises.push(urls.filter(i => !urlsParsed[i]).map(computeResults))
+        Promise.all(urls.filter(i => !urlsParsed[i]).map(computeResults)).then(i => resolve())
       }
     )
-  })
+  }), 1)
 
-  promises.push(computeResults(''))
-
-  Promise.all(promises).then(i => {
-    console.log(Object.keys(urlsParsed).length)
-    resolve(result)
-  })
+  Promise.all([computeResults('')]).then(i => resolve(result), i => console.log('Error'))
 })
