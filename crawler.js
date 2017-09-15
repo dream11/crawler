@@ -20,7 +20,7 @@ module.exports = url =>
 	var visitedLink = {}
 	var count = 0
 	var arrayObj = {}
-  	
+	var baseUrl = url
   	var getLexigraphy = function(data){
   		resolve(data.sort()[0])
   	}
@@ -58,7 +58,8 @@ module.exports = url =>
 		  	console.log('resolved the data')
 		  	getLexigraphy(array)
 		  }else{
-		  	crawl('http://localhost:8080'+linkArray[count])
+		  	console.log(baseUrl+linkArray[count])
+		  	crawl(baseUrl+linkArray[count])
 		  	count++
 		  }
 		
