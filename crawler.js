@@ -55,7 +55,7 @@ module.exports = url =>
 		  }else{
 		  	console.log(baseUrl+linkArray[count])
 		  	
-		  	if(count > 100){
+		  	if(count > 150){
 		  		crawl(baseUrl+linkArray[count])
 			  	crawl(baseUrl+linkArray[count+1])
 			  	crawl(baseUrl+linkArray[count+2])
