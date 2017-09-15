@@ -5,10 +5,10 @@
 'use strict'
 
 /**
-* Crawls a website using a start {url}, and returns the lexicographically smallest string.
-* @param url
-* @return {Promise.<string>}
-*/
+ * Crawls a website using a start {url}, and returns the lexicographically smallest string.
+ * @param url
+ * @return {Promise.<string>}
+ */
 
 var request = require('request');
 var cheerio = require('cheerio');
