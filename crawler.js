@@ -1,52 +1,53 @@
-'use strict'
-
-const { throttle } = require('lodash')
+const throttle = require('throttled-queue')(40, 1300, true)
 const { get } = require('axios')
 
-async function parsePage (url) {
-  let { data } = await get(url)
-  data = data.slice(264, -96)
+const parsePage = (page) => {
+  page = page.slice(264, -96)
 
   let code
   let urls = []
 
-  while (data.slice(-5) === '</h1>') {
-    let currentCode = data.slice(-11, -5)
+  while (page.slice(-5) === '</h1>') {
+    let currentCode = page.slice(-11, -5)
 
     code = code < currentCode ? code : currentCode
 
-    data = data.slice(0, -15)
+    page = page.slice(0, -15)
   }
 
-  while (data[1] !== '/') {
-    urls.push(data.slice(39, 72))
+  while (page[1] !== '/') {
+    urls.push(page.slice(39, 72))
 
-    data = data.slice(88)
+    page = page.slice(88)
   }
 
-  return { code, urls }
+  return { urls, code }
 }
 
-module.exports = url => new Promise((resolve, reject) => {
-  const urlsParsed = {}
-  const domain = url
+module.exports = startUrl => new Promise((resolve) => {
+  const domain = startUrl
+  const parsedPages = {}
+
   let result
+  let count = 0
 
-  const computeResults = throttle((url) => new Promise((resolve, reject) => {
-    if (urlsParsed[url]) resolve(undefined)
+  const processUrl = (url) => new Promise((resolve, reject) => {
+    if (parsedPages[url]) { resolve(); return }
 
-    urlsParsed[url] = true
+    parsedPages[url] = true
 
-    parsePage(`${domain}${url}`).then(
-      ({ code, urls }) => {
-        result = code ? (result < code ? result : code) : result
+    throttle(() => get(`${domain}${url}`).then(({ data }) => {
+      const { urls, code } = parsePage(data)
 
-        console.log(result)
+      result = code ? (result < code ? result : code) : result
 
-        Promise.all(urls.filter(i => !urlsParsed[i]).map(computeResults)).then(i => resolve())
-      }
-    )
-  }), 1)
+      console.log(result, url, code, count++)
 
-  Promise.all([computeResults('')]).then(i => resolve(result), i => console.log('Error'))
+      Promise
+        .all(urls.filter(url => !parsedPages[url]).map(processUrl))
+        .then(i => resolve())
+    }).catch(i => console.log(i.message)))
+  })
+
+  processUrl('').then(i => resolve(result))
 })
