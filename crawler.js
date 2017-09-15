@@ -14,6 +14,7 @@ var loopIntervalInstance = null;
 var loopInterval = 10;
 var requestCount = 0;
 var responseCount = 0;
+var mainUrl = "";
 
 /*var responseTimeoutInstancee = null;
 var responseTimeoutDuration = 3000;*/
@@ -33,7 +34,7 @@ module.exports = url =>
   });
 
 function crawl(url,cb){
-
+	mainUrl = url;
 	request(url,function(err,res,body){
 		
 		parseBody(res.statusCode,body);
@@ -59,7 +60,7 @@ function loopCrawler(cb){
 	else{
 		
 		requestCount++;
-		request("http://localhost:8080/"+popUrl,function(err,res,body){
+		request(mainUrl+ "/"+popUrl,function(err,res,body){
 
 			responseCount++;
 			if(err){
