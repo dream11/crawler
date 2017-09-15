@@ -137,7 +137,11 @@ function lexcheck(string){
 
 
 function findShortestLexString(){
-	bstrings = bstrings.sort();
+	bstrings = bstrings.sort(function(a, b){
+	    if(a < b) return -1;
+	    if(a > b) return 1;
+	    return 0;
+	});
 	/*
 	var minString = bstrings[Object.keys(bstrings)[0]];
 	for(var i in bstrings){
@@ -147,6 +151,9 @@ function findShortestLexString(){
 		}
 
 	}*/
+
+
+	console.log(bstrings[0]);
 	return bstrings[0];
 
 }
