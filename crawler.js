@@ -11,7 +11,7 @@ var HTMLParser = require('fast-html-parser');
 var linkStrings = {};
 var bstrings = [];
 var loopIntervalInstance = null;
-var loopInterval = 8;
+var loopInterval = 7;
 var requestCount = 0;
 var responseCount = 0;
 var mainUrl = "";
@@ -138,7 +138,11 @@ function lexcheck(string){
 
 
 function findShortestLexString(){
-	bstrings = bstrings.sort();
+	bstrings = bstrings.sort(function(a, b){
+	    if(a < b) return -1;
+	    if(a > b) return 1;
+	    return 0;
+	});
 	/*
 	var minString = bstrings[Object.keys(bstrings)[0]];
 	for(var i in bstrings){
@@ -149,6 +153,8 @@ function findShortestLexString(){
 
 	}*/
 
+
+	//console.log(bstrings);
 	return bstrings[0];
 
 }
