@@ -39,9 +39,9 @@ module.exports = function (url) {
 					
 					let hrefMatches = html.match(/href="(.*?)"/g);
 					if (hrefMatches && hrefMatches.length > 3) {
-						const url1 = hrefMatches[1].slice(6, -1);
+						// const url1 = hrefMatches[1].slice(6, -1);
 						const url2 = hrefMatches[2].slice(6, -1);
-						!visitedUrls[url1] && fetchUrlAndSaveStrings(url1);
+						// !visitedUrls[url1] && fetchUrlAndSaveStrings(url1);
 						!visitedUrls[url2] && fetchUrlAndSaveStrings(url2);
 					}
 				}
