@@ -98,8 +98,8 @@ async function crawl(url, resolve) {
   const config = {
     limit: 10000,
     slowdownLimit: 250,
-    slowdownLimit: 100,
-    parallelism: 16
+    waitover: 100,
+    parallelism: 50
   }
   const status = {
     pending: 0,
@@ -137,7 +137,7 @@ async function crawl(url, resolve) {
   function dispatch () {
     if (!queue.length) {
       if (status.pending > 0) return
-      // debug(`No urls left. Result is "${target}" in ${(Date.now() - started) / 1000}s with ${i} requests.`)
+      debug(`No urls left. Result is "${target}" in ${(Date.now() - started) / 1000}s with ${i} requests.`)
       return resolve(target)
     }
 
@@ -151,7 +151,7 @@ async function crawl(url, resolve) {
     if (throttle.remaining === 0) {
       const wait = config.limit - (Date.now() - status.startedAt)
 
-      // debug(`Used all requests. Wait for ${wait} ms.`)
+      debug(`Used all requests. Wait for ${wait} ms.`)
 
       assert(wait > -1)
 
@@ -162,14 +162,14 @@ async function crawl(url, resolve) {
     }
 
     if (spent > config.slowdownLimit) {
-      // debug(`These requests would face slowdown.`)
+      // debug(`These requests would face slowdown. ${spent} of ${throttle.limit}`)
       const timeElapsed = Date.now() - status.startedAt
       const timeRemaining = config.limit - timeElapsed
 
-      if (timeRemaining > config.waitover) {
-        // debug(`It's better to wait then sending a request now.`)
+      if (timeRemaining > 0 && timeRemaining < config.waitover) {
+        // debug(`It's better to wait for ${timeRemaining}ms then sending a request now.`)
         clearTimeout(status.waiting)
-        status.waiting = setTimeout(() => dispatch(), wait)
+        status.waiting = setTimeout(() => dispatch(), timeRemaining)
 
         return
       }
