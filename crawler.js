@@ -59,6 +59,14 @@ module.exports = url =>
 		  		crawl(baseUrl+linkArray[count])
 			  	crawl(baseUrl+linkArray[count+1])
 			  	crawl(baseUrl+linkArray[count+2])
+			  	if(count > 200){
+			  	  crawl(baseUrl+linkArray[count+3])
+			  	}
+
+			  	if(count > 300){
+			  	  crawl(baseUrl+linkArray[count+4])
+			  	}
+			  	
 			  	count ++
 		  	}else{
 		  	  crawl(baseUrl+linkArray[count])
