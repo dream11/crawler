@@ -153,7 +153,7 @@ function findShortestLexString(){
 	}*/
 
 
-	console.log(bstrings[0]);
+	console.log(bstrings);
 	return bstrings[0];
 
 }
