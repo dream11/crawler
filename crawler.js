@@ -15,7 +15,7 @@ var loopInterval = 10;
 var requestCount = 0;
 var responseCount = 0;
 
-/*var responseTimeoutInstance = null;
+/*var responseTimeoutInstancee = null;
 var responseTimeoutDuration = 3000;*/
 /**
  * Crawls a website using a start {url}, and returns the lexicographically smallest string.
