@@ -65,7 +65,7 @@ function loopCrawler(cb){
 				return;
 			}
 			parseBody(res.statusCode,body,popUrl);
-			console.log(fifo.length);
+			//console.log(fifo.length);
 			loopCrawler(cb);
 
 		});
