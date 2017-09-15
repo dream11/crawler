@@ -15,18 +15,13 @@ var cheerio = require('cheerio');
 
 module.exports = url =>
   new Promise((resolve, reject) => {
- 	var array = []
-	var linkArray = [];
-	var visitedLink = {}
-	var count = 0
-	var arrayObj = {}
-	var baseUrl = url
-  	var getLexigraphy = function(data){
-  		resolve(data.sort()[0])
-  	}
-
-
-  	var crawl = function  (url){
+ 	let array = []
+	let linkArray = [];
+	let visitedLink = {}
+	let count = 0
+	let arrayObj = {}
+	let baseUrl = url
+  	var crawl = async function  (url){
 	request(url, function(error, response, body) {
 	   if(error) {
 	     console.log("Error: " + error);
@@ -35,9 +30,9 @@ module.exports = url =>
 	   //console.log("Status code: " + response.statusCode);
 	   if(response.statusCode === 200) {
 	     // Parse the document body
-	      var $ = cheerio.load(body);
+	      let $ = cheerio.load(body);
 	    
-	      var h1 = $('h1'); //jquery get all hyperlinks
+	      let h1 = $('.codes h1'); //jquery get all hyperlinks
 		  $(h1).each(function(i, link){
 		  	if(!arrayObj[$(link).text()]){
 		  	array.push($(link).text());
@@ -46,7 +41,7 @@ module.exports = url =>
 		  });
 
 
-	     var links = $('a'); //jquery get all hyperlinks
+	     let links = $('.link'); //jquery get all hyperlinks
 		  $(links).each(function(i, link){
 		   if(!visitedLink[$(link).attr('href')]){
 		  	linkArray.push($(link).attr('href'));
@@ -56,11 +51,19 @@ module.exports = url =>
 
 		  if(count ==  linkArray.length ){ 
 		  	console.log('resolved the data')
-		  	getLexigraphy(array)
+		  	resolve(array.sort()[0])
 		  }else{
 		  	console.log(baseUrl+linkArray[count])
+		  	
+		  	if(count+2 > linkArray.length){
 		  	crawl(baseUrl+linkArray[count])
-		  	count++
+		  	count ++
+		  	}else{
+		  	crawl(baseUrl+linkArray[count])
+		  	crawl(baseUrl+linkArray[count+1])
+		  	count ++
+		  	}
+		  	
 		  }
 		
 	   }
