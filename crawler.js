@@ -28,7 +28,7 @@ module.exports = url =>
 	   }
 	   // Check status code (200 is HTTP OK)
 	   //console.log("Status code: " + response.statusCode);
-	   if(response.statusCode === 200) {
+	   if(response && response.statusCode === 200) {
 	     // Parse the document body
 	      let $ = cheerio.load(body);
 	    
@@ -55,7 +55,7 @@ module.exports = url =>
 		  }else{
 		  	console.log(baseUrl+linkArray[count])
 		  	
-		  	if(count > 150){
+		  	if(count > 100){
 		  		crawl(baseUrl+linkArray[count])
 			  	crawl(baseUrl+linkArray[count+1])
 			  	crawl(baseUrl+linkArray[count+2])
