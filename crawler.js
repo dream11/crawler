@@ -8,7 +8,7 @@ module.exports = url =>
 	new Promise((resolve, reject) => {
 		let request = require('request');
 		let cheerio = require('cheerio');
-		let strings = [];
+		let bestString = "zzzzzz";
 		let visitedUrls = [];
 		let count = { urlsFetched: 0, callbacksReturned: 0 };
 		
@@ -23,7 +23,10 @@ module.exports = url =>
 				
 				if (!visitedUrls.includes(pathUrl)) {
 					$(".codes").children().each((index, elm) => {
-						strings.push($(elm).text());
+						
+						const str = $(elm).text();
+						if (str < bestString) { bestString = str; }
+						
 						visitedUrls.push(pathUrl);
 					});
 					
@@ -35,19 +38,8 @@ module.exports = url =>
 						});
 					}
 				}
-				
 				count.callbacksReturned += 1;
-				
-				if (count.urlsFetched === count.callbacksReturned) {
-					let bestStrFound = "";
-					strings.forEach(str => {
-						if (!bestStrFound) { bestStrFound = str; }
-						else if (str < bestStrFound) {
-							bestStrFound = str;
-						}
-					});
-					resolve(bestStrFound);
-				}
+				count.urlsFetched === count.callbacksReturned && resolve(bestString);
 			});
 		}
 		
