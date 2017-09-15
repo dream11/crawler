@@ -16,9 +16,9 @@ const links = [{
 var smallestString = 'zzzzzzzzzzzzzzzz';
 var visited = {};
 
-const getStringsAndUrls = (url, cb) => {
-  url = "http://localhost:8080" + url;
-  http.get(url, (res) => {
+const getStringsAndUrls = (url, location, cb) => {
+  const nextPage = url + location;
+  http.get(nextPage, (res) => {
     res.setEncoding('utf8');      
     res.on('data', data => {
       const href = /href="(.*?)"/g;
@@ -42,7 +42,7 @@ const getStringsAndUrls = (url, cb) => {
         }
       }
       if(links.length > 0) {
-        getStringsAndUrls(links.pop().location, cb);
+        getStringsAndUrls(url, links.pop().location, cb);
       } else {
         cb(smallestString);
       }
@@ -57,5 +57,5 @@ module.exports = url =>
     /**
      * TODO: Write your high performance code here.
      */
-    getStringsAndUrls(links.pop().location, (answer) => resolve(answer));
+    getStringsAndUrls(url, links.pop().location, (answer) => resolve(answer));
   });
