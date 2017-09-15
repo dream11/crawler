@@ -15,8 +15,5 @@ class Spider(scrapy.Spider):
 	  yield response.follow(next_page, self.parse)
 
     def closed(reason, r2):
-	print len(links)
-	print len(codes_list)
-	print "===================="
 	codes_list.sort()
 	print codes_list.pop(0)
