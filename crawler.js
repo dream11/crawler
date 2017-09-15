@@ -9,7 +9,7 @@ var FIFO = require("fifo");
 var fifo = FIFO();
 var HTMLParser = require('fast-html-parser');
 var linkStrings = {};
-var bstrings = {};
+var bstrings = [];
 var loopIntervalInstance = null;
 var loopInterval = 10;
 var requestCount = 0;
@@ -107,9 +107,9 @@ function parseBody(status, body,popUrl){
 			for(var i in codes.childNodes){
 			var lexString = codes.childNodes[i].childNodes['0'].rawText;
 			
-			if( typeof bstrings[lexString] == "undefined"){				
-				bstrings[lexString] = lexString;
-			}
+				
+				bstrings.push(lexString);
+			
 			}
 
 		}
@@ -137,7 +137,8 @@ function lexcheck(string){
 
 
 function findShortestLexString(){
-	
+	bstrings = bstrings.sort();
+	/*
 	var minString = bstrings[Object.keys(bstrings)[0]];
 	for(var i in bstrings){
 
@@ -145,7 +146,7 @@ function findShortestLexString(){
 			minString = bstrings[i];
 		}
 
-	}
-	return minString;
+	}*/
+	return bstrings[0];
 
 }
