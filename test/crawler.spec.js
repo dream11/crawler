@@ -6,7 +6,7 @@
 
 const port = (process.env.PORT = process.env.PORT || 8081)
 
-const {start, stop} = require('../server')
+const {server: start, stop} = require('../server')
 const assert = require('assert')
 const crawl = require('../crawler')
 const OneMin = 60 * 1000
