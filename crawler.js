@@ -14,11 +14,15 @@ const cheerio = require('cheerio');
 const words = [];
 const linkMap = {};
 const links = [];
+
 module.exports = url =>
   new Promise((resolve, reject) => {
     const crawl = async currentUrl => {
       request(currentUrl, (err, res, body) => {
-        if(res && res.statusCode === 200) {
+        if(err) {
+          reject(err);
+        }
+        if(res && 200 === res.statusCode) {
           let $ = cheerio.load(body);
           $('div.codes h1')
             .map((i, w) => w.firstChild.nodeValue)
@@ -34,11 +38,15 @@ module.exports = url =>
             });
 
           if(0 === links.length) {
-            resolve(words.sort()[0]);
+            resolve(words
+              .reduce((smallest, current) => 
+                current < smallest ? current : smallest, 
+              words[0]));
           } else {
-            for(var i = 0; i <= links.length / 100; i++) {
+            if(15 < links.length && 500 > links.length) {
               crawl(url + links.pop());
             }
+            crawl(url + links.pop());
           }
         } else if(err){
           reject(err);
