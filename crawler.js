@@ -30,7 +30,7 @@ module.exports = url =>
           for(j = 0; j<h1Tags.length; j++) {          
             strings.push($(h1Tags[j]).text());
           }   
-          console.log(links, strings);
+          // console.log(links, strings);
           resolve({links, strings});
         });
       });
@@ -40,9 +40,9 @@ module.exports = url =>
       var strings = [];
       var baseUrl = url;
       for(let i=0; i<urlsToVisit.length; i++) {
-        console.log(i);
+        // console.log(i);
         var response = await getURLsAndText(baseUrl + urlsToVisit[i]);
-        console.log(response.links.length);
+        // console.log(response.links.length);
         response.links.forEach((link) => {
             if(urlsToVisit.indexOf(link) < 0) {
                 urlsToVisit.push(link);
