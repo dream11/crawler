@@ -1,15 +1,9 @@
 sudo: false
-language: node_js
-cache:
-  yarn: true
-  directories:
-    - node_modules
-notifications:
-  email: false
-node_js:
-  - 'stable'
-before_script:
-  - npm test
-branches:
-  except:
-    - /^v\d+\.\d+\.\d+$/
+language: python
+python:
+  - 3.5
+install:
+  - pip install -r requirements.txt
+scripts:
+  - scrapyd
+  - curl http://localhost:6800/schedule.json -d project=default -d spider=linkspider
