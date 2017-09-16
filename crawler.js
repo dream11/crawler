@@ -18,7 +18,7 @@ var responseCount = 0;
 var concurrentRequests = 0;
 var mainUrl = "";
 var minString = "zzzzzzzz"
-var TimSort = require('timsort');
+
 
 /*var responseTimeoutInstancee = null;
 var responseTimeoutDuration = 3000;*/
