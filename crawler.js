@@ -12,9 +12,10 @@ module.exports = function (url) {
 		let pendingUrls = [];
 		const strs = [];
 		let count = { urlsFetched: 0, callbacksReturned: 0 };
-		let throttleCount = 498;
+		let throttleCount = 499;
+		let makeSlowCount = 249;
 		
-		const fetchUrlAndSaveStrings = async pathUrl => {
+		const fetchUrlAndSaveStrings = async (pathUrl) => {
 			count.urlsFetched += 1;
 			request(url + pathUrl, function (error, response, html) {
 				if (error) {
@@ -63,11 +64,16 @@ module.exports = function (url) {
 		};
 		
 		function checkAndCallFetchUrl(link) {
-			console.log(count.urlsFetched, count.callbacksReturned);
 			if (count.urlsFetched - count.callbacksReturned > throttleCount) {
 				pendingUrls.push(link);
 			} else {
-				return fetchUrlAndSaveStrings(link);
+				if (count.urlsFetched - count.callbacksReturned > makeSlowCount) {
+					setTimeout(function() {
+						fetchUrlAndSaveStrings(link)
+					}, 0);
+				} else {
+					return fetchUrlAndSaveStrings(link);
+				}
 			}
 		}
 		
