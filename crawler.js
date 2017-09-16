@@ -8,7 +8,7 @@ const request = require('request');
 const cheerio = require('cheerio');
 const fs = require('fs');
 
-const siteURL = "http://localhost:8080";
+let siteURL = "http://localhost:8080";
 
 let linksMap = {};
 let linksVisitedMap = {};
@@ -66,6 +66,7 @@ const getSiteDetails = (nextSiteHash, resolveFunc, callback) => {
  */
 module.exports = url =>
   new Promise((resolve, reject) => {
+    siteURL = url;
     getSiteDetails('', resolve, (strLexElem) => {
       console.log(strLexElem);
     });
