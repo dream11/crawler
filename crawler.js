@@ -70,8 +70,8 @@ const loopCrawler = async (cb,url) => {
             
             if(responseCount>200 && responseCount >= linksArr.length && (count+1)>=linksArr.length){
             	done = 1;
-            	TimSort.sort(bstrings);
-    			cb(bstrings[0]);
+            	//TimSort.sort(bstrings);
+    			cb(minString);
             }
             if (err) {
             	console.log(err);
@@ -80,20 +80,7 @@ const loopCrawler = async (cb,url) => {
             }
             parseBody(res.statusCode, body, url);
             loopCrawler(cb,linksArr[count]);	
-            /*if(count<250){
-            	loopCrawler(cb,linksArr[count]);	
-            	
-            }
-            else if(count>250 && responseCount>220 ){
-            	loopCrawler(cb,linksArr[count]);
-            	loopCrawler(cb,linksArr[count+1]);
-            		
-            }*/
             
-
-            /*if(count<20){
-            	loopCrawler(cb,linksArr[count+1]);
-            }*/
             count++;
 
         });
@@ -132,9 +119,8 @@ function parseBody(status, body, popUrl) {
             var s1 = n[1].substr(0, 6);
             reh1.lastIndex = n.index + 1;
 
-            bstrings.push(s1);
-            /*if (s1 < minString)
-                minString = s1;*/
+            if (s1 < minString)
+                minString = s1;
         }
 
     }
