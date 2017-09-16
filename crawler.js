@@ -99,7 +99,7 @@ async function crawl(url, resolve) {
     limit: 10000,
     slowdownLimit: 250,
     waitover: 100,
-    parallelism: 50
+    parallelism: 100
   }
   const status = {
     pending: 0,
@@ -151,7 +151,7 @@ async function crawl(url, resolve) {
     if (throttle.remaining === 0) {
       const wait = config.limit - (Date.now() - status.startedAt)
 
-      debug(`Used all requests. Wait for ${wait} ms.`)
+      // debug(`Used all requests. Wait for ${wait} ms.`)
 
       assert(wait > -1)
 
@@ -183,7 +183,16 @@ async function crawl(url, resolve) {
     i += requests.length
     status.pending += requests.length
     requests.map(
-      request => fetch(request).then(collect).catch(e => console.error(e))
+      request => fetch(request).then(collect).catch(
+        e => {
+          if (e.status && e.status > 400) {
+            debug(`Retry again!`)
+            queue.push(request)
+          } else {
+            console.error(e)
+          }
+        }
+      )
     )
   }
 
