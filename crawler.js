@@ -12,11 +12,7 @@ Array.prototype.random = function () {
   return this[Math.floor(Math.random() * this.length)]
 };
 
-const config = {
-  url: 'http://localhost:8080',
-  delays: [444,222,555,111,333]
-};
-
+const delays = [444,222,555,111,333];
 let visitedLinks = [];
 
 async function getData(url) {
@@ -45,7 +41,6 @@ async function getData(url) {
     // console.log('visitedLinks:', visitedLinks.length);
 
     if(links && links.length > 0) {
-      // crawled = crawled.concat(strings);
       // strings = strings.concat(links.map(async link => await getData(config.url + link)));
 
       for(let link of links) {
