@@ -45,7 +45,7 @@ describe('graph-0.json', function() {
   it('crawl()', async function() {
     this.timeout(OneMin)
     const actual = await crawl(`http://localhost:${port}`)
-    const expected = 'bcdzme'
+    const expected = 'bcenzq'
     assert.strictEqual(actual, expected)
   })
 })
@@ -63,7 +63,7 @@ describe('graph-1.json', function() {
   it('crawl()', async function() {
     this.timeout(OneMin)
     const actual = await crawl(`http://localhost:${port}`)
-    const expected = 'bcdtnk'
+    const expected = 'bcestu'
     assert.strictEqual(actual, expected)
   })
 })
@@ -81,7 +81,7 @@ describe('graph-2.json', function() {
   it('crawl()', async function() {
     this.timeout(OneMin)
     const actual = await crawl(`http://localhost:${port}`)
-    const expected = 'bcifrp'
+    const expected = 'bfqoic'
     assert.strictEqual(actual, expected)
   })
 })
@@ -99,7 +99,42 @@ describe('graph-3.json', function() {
   it('crawl()', async function() {
     this.timeout(OneMin)
     const actual = await crawl(`http://localhost:${port}`)
-    const expected = 'bcehmk'
+    const expected = 'bcrxvr'
+    assert.strictEqual(actual, expected)
+  })
+})
+
+describe('graph-4.json', function() {
+  before(async function() {
+    this.server = await start({
+      port: port,
+      graph: require('../public/graph-4.json')
+    })
+  })
+  after(async function() {
+    await stop(this.server)
+  })
+  it('crawl()', async function() {
+    this.timeout(OneMin)
+    const actual = await crawl(`http://localhost:${port}`)
+    const expected = 'bgzsjl'
+    assert.strictEqual(actual, expected)
+  })
+})
+describe('graph-5.json', function() {
+  before(async function() {
+    this.server = await start({
+      port: port,
+      graph: require('../public/graph-5.json')
+    })
+  })
+  after(async function() {
+    await stop(this.server)
+  })
+  it('crawl()', async function() {
+    this.timeout(OneMin)
+    const actual = await crawl(`http://localhost:${port}`)
+    const expected = 'bnnxgq'
     assert.strictEqual(actual, expected)
   })
 })
