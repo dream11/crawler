@@ -41,7 +41,7 @@ module.exports = url =>
 
     const getBest = async (url) => {
       request(url, (error, response, body) => {
-        if(error) {
+        if(error || (response && response.statusCode != 200)) {
           getBest(url);
           return;
         }
