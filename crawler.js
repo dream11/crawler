@@ -34,13 +34,14 @@ module.exports = url =>
 					}else if(response.statusCode === 200) {
 						visited[geturl] = true;
 
-						let $ = cheerio.load(body);
+						let $ = cheerio.load(body),
+							container = $('.container');
 
-						$('.codes h1').each(function(i, code){
+						container.find('h1').each(function(i, code){
 							codes.push($(code).text());
 						});
 
-						$('.link').each(function(i, link){
+						container.find('.link').each(function(i, link){
 							var href = url + $(link).attr('href');
 							if(!visited[href] && links.indexOf(href) === -1){
 								links.push(href);
