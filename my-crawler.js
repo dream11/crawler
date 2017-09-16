@@ -9,10 +9,8 @@
  * @param url
  * @return {Promise.<string>}
  */
-
-// Solution by Abhishek<abhiisheek@hotmail.com> & Nanda Kishore<nandakishorenw@gmail.com>
-
 var cheerioReq = require('cheerio-req');
+
 module.exports = url =>
   new Promise((resolve, reject) => {
     /**
