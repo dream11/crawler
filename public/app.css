@@ -48,3 +48,16 @@ h1 {
   margin: 24px 8px;
   font-size: 5em;
 }
+
+.qr-code {
+
+}
+
+.qr-code img {
+  display: block;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  height: 185px;
+  width: 185px;
+}
