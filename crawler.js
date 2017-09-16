@@ -61,6 +61,6 @@ module.exports = url =>
           resolve(tags.sort()[0])
         }
       })
-    }
+    } 
     getBest(url);
   });
