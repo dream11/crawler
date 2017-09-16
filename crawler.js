@@ -55,15 +55,15 @@ module.exports = url =>
 		  }else{
 		  	console.log(baseUrl+linkArray[count])
 		  	
-		  	if(count > 50){
-		  		crawl(baseUrl+linkArray[count])
-			  	crawl(baseUrl+linkArray[count+1])
-			  	crawl(baseUrl+linkArray[count+2])
-			  	count ++
-		  	}else{
+		  	// if(count > 50){
+		  	// 	crawl(baseUrl+linkArray[count])
+			  // 	crawl(baseUrl+linkArray[count+1])
+			  // 	crawl(baseUrl+linkArray[count+2])
+			  // 	count ++
+		  	// }else{
 		  	  crawl(baseUrl+linkArray[count])
 		  	  count ++
-		  	}
+		  	//}
 		  	
 		  }
 		
