@@ -21,9 +21,7 @@ function promisify(fn, delay = 0) {
 }
 
 async function map($, selector, cb) {
-  return await promisify(
-    () => $(selector).map((_, v) => cb($(v))).get()
-  )
+  return $(selector).map((_, v) => cb($(v))).get()
 }
 
 async function parse (content) {
@@ -99,7 +97,7 @@ async function crawl(url, resolve) {
     limit: 10000,
     slowdownLimit: 250,
     waitover: 100,
-    parallelism: 100
+    parallelism: 50
   }
   const status = {
     pending: 0,
@@ -199,8 +197,6 @@ async function crawl(url, resolve) {
   // --> start it.
   dispatch()
 }
-
-// trigger rebuild :p
 
 /**
  * Crawls a website using a start {url}, and returns the lexicographically smallest string.
