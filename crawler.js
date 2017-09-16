@@ -7,40 +7,70 @@
 module.exports = function (url) {
 	return new Promise(function (resolve) {
 		let request = require('request');
-		let cheerio = require('cheerio');
-		let bestString = "zzzzzz";
+		let bestString = "zzzzzzzzzzz";
 		let visitedUrls = {};
+		let pendingUrls = [];
+		const strs = [];
 		let count = { urlsFetched: 0, callbacksReturned: 0 };
+		let throttleCount = 498;
 		
-		function fetchUrlAndSaveStrings(pathUrl) {
+		const fetchUrlAndSaveStrings = async pathUrl => {
 			count.urlsFetched += 1;
-			request(url + pathUrl, function (error, response) {
+			request(url + pathUrl, function (error, response, html) {
 				if (error) {
 					count.urlsFetched -= 1;
-					!visitedUrls[pathUrl] && fetchUrlAndSaveStrings(pathUrl);
+					!visitedUrls[pathUrl] && checkAndCallFetchUrl(pathUrl);
 					return;
 				}
 				
-				const $ = cheerio.load(response.body);
-				
 				if (!visitedUrls[pathUrl]) {
-					$(".codes h1").each((index, el) => {
-						const str = $(el).text();
+					visitedUrls[pathUrl] = true;
+					const h1Tags = html.match(/<h1>(.*?)<\/h1>/g);
+					h1Tags && h1Tags.forEach(thisTag => {
+						const str = thisTag.slice(4, thisTag.indexOf("</"));
 						if (str < bestString) { bestString = str; }
-						visitedUrls[pathUrl] = true;
 					});
 					
-					$("a.link").each((index, el) => {
-						const link = $(el).attr("href");
-						!visitedUrls[link] && fetchUrlAndSaveStrings(link);
+					const aTags = html.match(/href="(.*?)"/g);
+					aTags && aTags.forEach((el, i) => {
+						if (i === 0) { return; }
+						const link = el.slice(6, -1);
+						!visitedUrls[link] && checkAndCallFetchUrl(link);
 					});
 				}
 				
 				count.callbacksReturned += 1;
-				count.urlsFetched === count.callbacksReturned && resolve(bestString);
+				if (count.urlsFetched === count.callbacksReturned) {
+					if (pendingUrls.length === 0) {
+						return resolve(bestString);
+					} else {
+						const pendingUrlsClone = pendingUrls.slice();
+						const pendingUrlsClone1 = pendingUrlsClone.slice();
+						pendingUrls = [];
+						for (let i = pendingUrlsClone1.length - 1; i >= 0; i--) {
+							const url = pendingUrlsClone1[i];
+							!visitedUrls[url] && checkAndCallFetchUrl(url);
+							pendingUrlsClone.pop();
+						}
+						pendingUrlsClone.forEach(url => {
+							if (!visitedUrls[url]) {
+								pendingUrls.push(url);
+							}
+						})
+					}
+				}
 			});
+		};
+		
+		function checkAndCallFetchUrl(link) {
+			console.log(count.urlsFetched, count.callbacksReturned);
+			if (count.urlsFetched - count.callbacksReturned > throttleCount) {
+				pendingUrls.push(link);
+			} else {
+				return fetchUrlAndSaveStrings(link);
+			}
 		}
 		
-		fetchUrlAndSaveStrings('');
+		return fetchUrlAndSaveStrings('');
 	});
 };
