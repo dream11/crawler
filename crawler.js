@@ -9,12 +9,12 @@
  * @param url
  * @return {Promise.<string>}
  */
-const Cheerio = require('cheerio');
+// const Cheerio = require('cheerio');
 const request = require('request');
 
 const CONCURRENCY = 1;
 
-const getLinkRegex = () => /href="\/([a-z,0-9]+)">([0-9,a-z]+)/g;
+const getLinkRegex = () => /href="(\/[a-z,0-9]+)">/g;
 const getCodeRegex = () => /<h1>([a-z]+)<\/h1>/g;
 
 const getBody = url =>
@@ -36,7 +36,7 @@ const getCodes = async (url) => {
   let codeRegex = getCodeRegex();
   let regexLinkOutput, regexCodeOutput;
   while (regexLinkOutput = linkRegex.exec(body)) {
-    links.push('/' + regexLinkOutput[1]);
+    links.push(regexLinkOutput[1]);
   }
   while (regexCodeOutput = codeRegex.exec(body)) {
     codes.push(regexCodeOutput[1]);
