@@ -11,12 +11,13 @@ const cheerio = require('cheerio');
  * @param url
  * @return {Promise.<string>}
  */
-const words = [];
-const linkMap = {};
-const links = [];
 
-module.exports = url =>
-  new Promise((resolve, reject) => {
+
+module.exports = url => {
+  const words = [];
+  const linkMap = {};
+  const links = [];
+  return new Promise((resolve, reject) => {
     const crawl = async currentUrl => {
       request(currentUrl, (err, res, body) => {
         if(err) {
@@ -36,16 +37,12 @@ module.exports = url =>
               links.push(l);
               linkMap[l] = true;
             });
-
           if(0 === links.length) {
             resolve(words
               .reduce((smallest, current) => 
                 current < smallest ? current : smallest, 
               words[0]));
           } else {
-            if(15 < links.length && 500 > links.length) {
-              crawl(url + links.pop());
-            }
             crawl(url + links.pop());
           }
         } else if(err){
@@ -55,3 +52,4 @@ module.exports = url =>
     }
     crawl(url);
   })
+}
