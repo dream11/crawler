@@ -10,11 +10,7 @@ const http = require('http');
  * @param url
  * @return {Promise.<string>}
  */
-const links = [{
-  urlText: "home",
-  location: '/'}];
-var smallestString = 'zzzzzzzzzzzzzzzz';
-var visited = {};
+let links, smallestString, visited;
 
 const getStringsAndUrls = (url, location, cb) => {
   const nextPage = url + location;
@@ -57,5 +53,10 @@ module.exports = url =>
     /**
      * TODO: Write your high performance code here.
      */
+    links = [{
+      urlText: "home",
+      location: '/'}];
+    smallestString = 'zzzzzzzzzzzzzzzz';
+    visited = {};
     getStringsAndUrls(url, links.pop().location, (answer) => resolve(answer));
   });
