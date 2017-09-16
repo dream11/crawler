@@ -32,7 +32,7 @@ module.exports = url =>
   new Promise((resolve, reject) => {
 
     const startTime = new Date();
-    let bestString = url;
+    let tags = [url];
     const baseURL = url;
     let linkCount = 1;
     let resolvedCount = 0;
@@ -49,10 +49,7 @@ module.exports = url =>
           getBest(url);
         }
         const linkList = getMatches(body, linkRegex).map(link => link.substr(0, 1) == '/' ? baseURL + link : link);
-        const tags = getMatches(body, tagRegex).sort();
-
-        if (!bestString || tags[0] < bestString)
-          bestString = tags[0];
+        tags.push(...getMatches(body, tagRegex));
 
         linkList.forEach((link) => {
           if (!linksTouched[link]) {
@@ -63,7 +60,7 @@ module.exports = url =>
         });
 
         if (resolvedCount == linkCount) {
-          resolve(bestString)
+          resolve(tags.sort()[0])
         }
       })
     }
