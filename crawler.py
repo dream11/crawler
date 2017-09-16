@@ -1,15 +1,13 @@
 import scrapy
-from datetime import datetime
-timenow=datetime.now()
 from heapq import heappush, heappop
 code_list = []
 
-class Spider(scrapy.Spider):
+class MyBaseSpider(scrapy.Spider):
 	name = 'spider'
 	start_urls = ['http://localhost:8080']
 	custom_settings = {
         'LOG_ENABLED': 'false',
-		'CONCURRENT_REQUESTS': 4,
+		'CONCURRENT_REQUESTS': 2,
 		'CONCURRENT_REQUESTS_PER_DOMAIN': 4
     }
 	def __init__(self, url=None):
@@ -25,4 +23,3 @@ class Spider(scrapy.Spider):
 
 	def closed(self, reason):
 		print heappop(code_list)
-		print datetime.now() - timenow
