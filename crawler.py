@@ -16,14 +16,10 @@ def recursiveLinks(route):
     word_list.extend(words)
     links = html.findAll('a')
     if links > 0:
-        count = 0
-        maxi = len(links)
-        while count < maxi:
-            link = links[count]
+        for link in links:
             if not link['href'] in link_list:
                 link_list.add(link['href'])
                 links.extend(recursiveLinks(link['href']))
-            count += 1
     return links
 
 # print(start)
