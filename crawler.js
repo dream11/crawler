@@ -9,7 +9,7 @@
  * @param url
  * @return {Promise.<string>}
  */
-// const Cheerio = require('cheerio');
+const Cheerio = require('cheerio');
 const request = require('request');
 
 const CONCURRENCY = 1;
