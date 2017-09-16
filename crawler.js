@@ -1,4 +1,4 @@
-const throttle = require('throttled-queue')(40, 1000, true)
+const throttle = require('./throttle')
 const { get } = require('axios')
 
 const parsePage = (page) => {
@@ -46,7 +46,7 @@ module.exports = startUrl => new Promise((resolve) => {
       Promise
         .all(urls.filter(url => !parsedPages[url]).map(processUrl))
         .then(i => resolve())
-    }).catch(i => console.log(i.message)))
+    }).catch(i => processUrl(url).then(i => resolve())))
   })
 
   processUrl('').then(i => resolve(result))
