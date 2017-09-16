@@ -14,8 +14,12 @@ module.exports = function (url) {
 		
 		function fetchUrlAndSaveStrings(pathUrl) {
 			count.urlsFetched += 1;
-			request(url + pathUrl, function (error, response, html) {
-				if (error) { count.urlsFetched -= 1; return; }
+			request(url + pathUrl, function (error, response) {
+				if (error) {
+					count.urlsFetched -= 1;
+					!visitedUrls[pathUrl] && fetchUrlAndSaveStrings(pathUrl);
+					return;
+				}
 				
 				const $ = cheerio.load(response.body);
 				
