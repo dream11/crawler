@@ -23,8 +23,8 @@ const getSiteDetails = (nextSiteHash, resolveFunc, callback) => {
       console.log("Error: " + error);
     }
 
-    console.log(nextSite);
-    console.log("Status code: " + response.statusCode);
+    // console.log(nextSite);
+    // console.log("Status code: " + response.statusCode);
     let $ = cheerio.load(body);
 
     $('a.link').each(function( index ) {
@@ -43,8 +43,8 @@ const getSiteDetails = (nextSiteHash, resolveFunc, callback) => {
     while(Object.keys(linksMap).length) {
       let nextPageHash = linksMap[Object.keys(linksMap)[0]];
       getSiteDetails(nextPageHash, resolveFunc, (strLexElem) => {
-        console.log(strLexElem);
-        console.log(siteVisitCount);
+        // console.log(strLexElem);
+        // console.log(siteVisitCount);
         siteVisitCount--;
         if(siteVisitCount == 1) {
           resolveFunc(strLexElem);
@@ -68,7 +68,7 @@ module.exports = url =>
   new Promise((resolve, reject) => {
     siteURL = url;
     getSiteDetails('', resolve, (strLexElem) => {
-      console.log(strLexElem);
+      // console.log(strLexElem);
     });
 
 
