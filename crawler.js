@@ -18,6 +18,7 @@ var responseCount = 0;
 var concurrentRequests = 0;
 var mainUrl = "";
 var minString = "zzzzzzzz"
+var done = 0;
 
 
 /*var responseTimeoutInstancee = null;
@@ -30,8 +31,19 @@ var responseTimeoutDuration = 3000;*/
 module.exports = url =>
     new Promise((resolve, reject) => {
 
+    	count = 0;
+    	linkStrings = {};
+    	bstrings = [];
+    	linksArr = [];
+    	requestCount = 0;
+		responseCount = 0;
+		concurrentRequests = 0;
+		mainUrl = "";
+		minString = "zzzzzzzz"
+		done = 0;
+
         crawl(url, function(str) {
-            resolve(str);
+            resolve(str);            
         });
         //resolve({});
         //reject(new Error('NotImplemented'))
@@ -43,49 +55,52 @@ function crawl(url, cb) {
 
         parseBody(res.statusCode, body);
         loopCrawler(cb,linksArr[count]);
-        count++;
-
-        /*loopIntervalInstance = setInterval(function(){
-        	loopCrawler(cb);
-        },loopInterval);*/
+        //count++;
     });
 
 }
 
 
 const loopCrawler = async (cb,url) => {
-	//console.log(url,count);
+	
     var popUrl = url;
     //count++;
-
-    if (popUrl) {
+    //console.log(url,count,mainUrl + popUrl);
+    if (popUrl && !done && requestCount < linksArr.length) {
 
         requestCount++;
         //console.log(concurrentRequests);
-        request(mainUrl + popUrl, function(err, res, body) {
+        request(mainUrl + '/' +popUrl, function(err, res, body) {
 
-            //console.log(requestCount, responseCount,count,linksArr.length);
+            if(done) return;
             responseCount++;
-
-            if (requestCount == responseCount && count == linksArr.length) {
+            //console.log(requestCount, responseCount,count,linksArr.length);
+            //console.log(linksArr);
+            /*if (requestCount == responseCount && count == linksArr.length) {
 
                 finishFunction(cb);
-            }
-            if(requestCount> responseCount && responseCount == linksArr.length){
+            }*/
+            if(responseCount>200 && responseCount >= linksArr.length && (count+1)>=linksArr.length){
+            	console.log("===========================================calling finish")
             	finishFunction(cb);	
             }
             if (err) {
+            	console.log(err);
+            	linksArr.push(url);
                 return;
             }
             parseBody(res.statusCode, body, popUrl);
 
             
             loopCrawler(cb,linksArr[count]);
-            if(count<150 || count > 500){
+            if(count<50 /*&& count < 200*/){
+            	loopCrawler(cb,linksArr[count+1]);
+            }
+            /*if(count<150 || (count > 500 && count < 800) ){
             	loopCrawler(cb,linksArr[count+1]);
             	//loopCrawler(cb,linksArr[count+2]);
             	//count++;
-            }
+            }*/
             count++;
 
         });
@@ -98,7 +113,8 @@ function finishFunction(cb) {
 
 
     //cb(findShortestLexString());
-    console.log(minString);
+    //console.log(minString);
+    done = 1;
     cb(minString);
 }
 
@@ -154,22 +170,11 @@ function parseBody(status, body, popUrl) {
 
 
 function findShortestLexString() {
-    console.time("sorting");
+
     bstrings = bstrings.sort();
-    //TimSort.sort(bstrings);
-    console.timeEnd("sorting");
-    /*
-    var minString = bstrings[Object.keys(bstrings)[0]];
-    for(var i in bstrings){
-
-    	if(bstrings[i]<minString){
-    		minString = bstrings[i];
-    	}
-
-    }*/
 
 
-    //console.log(bstrings);
+
     return bstrings[0];
 
 }
