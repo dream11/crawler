@@ -31,19 +31,23 @@ const getMatches = (str, regex) => {
 module.exports = url =>
   new Promise((resolve, reject) => {
 
+    const startTime = new Date();
     let bestString = url;
     const baseURL = url;
-    const links = [];
-    let count = 0;
+    let linkCount = 1;
+    let resolvedCount = 0;
     const linksTouched = {};
     const linkRegex = /href="(.*?)"/g;
     const tagRegex = /<h1>(.*?)<\/h1>/g;
 
     const getBest = async (url) => {
       request(url, (error, response, body) => {
+
+        let endTime = new Date();
+        resolvedCount++;
         if(error) {
-           reject(error); return;
-         }
+          getBest(url);
+        }
         const linkList = getMatches(body, linkRegex).map(link => link.substr(0, 1) == '/' ? baseURL + link : link);
         const tags = getMatches(body, tagRegex).sort();
 
@@ -53,15 +57,13 @@ module.exports = url =>
         linkList.forEach((link) => {
           if (!linksTouched[link]) {
             linksTouched[link] = true;
-            links.push(link);
+            linkCount++;
+            getBest(link);
           }
         });
 
-        count++;
-        if (count == links.length) {
+        if (resolvedCount == linkCount) {
           resolve(bestString)
-        } else {
-          getBest(links[count]);
         }
       })
     }
