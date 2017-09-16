@@ -119,6 +119,15 @@ function visitPage(url, callback) {
 
 module.exports = url =>
 new Promise((resolve) => {
+	pagesVisited = {};
+	pagesToBeVisited = {};
+	stringsFound = 0;
+	numPagesVisited = 0;
+	pagesToVisit = [];
+	firstLexographicWord = '';
+	maxPagesToBeVisited = 10;
+	promiseForFetch = new PromiseDefer();
+
 	START_URL = url;
 	pagesToVisit.push(START_URL);
 	crawl();
