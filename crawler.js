@@ -41,8 +41,8 @@ module.exports = url =>
 
     const getBest = async (url) => {
       request(url, (error, response, body) => {
-        if(error) {
-          getBest(url);
+        if (error) {
+          setTimeout(() => getBest(url), 10);
           return;
         }
         resolvedCount++;
