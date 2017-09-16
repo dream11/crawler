@@ -31,36 +31,39 @@ const getMatches = (str, regex) => {
 module.exports = url =>
   new Promise((resolve, reject) => {
 
-    let tags = [url];
+    let bestString = url;
     const baseURL = url;
-    let linkCount = 1;
-    let resolvedCount = 0;
+    const links = [];
+    let count = 0;
     const linksTouched = {};
     const linkRegex = /href="(.*?)"/g;
     const tagRegex = /<h1>(.*?)<\/h1>/g;
 
     const getBest = async (url) => {
       request(url, (error, response, body) => {
-        if (error) {
-          setTimeout(() => getBest(url), 10);
-          return;
-        }
-        resolvedCount++;
+        if(error) {
+           reject(error); return;
+         }
         const linkList = getMatches(body, linkRegex).map(link => link.substr(0, 1) == '/' ? baseURL + link : link);
-        tags.push(getMatches(body, tagRegex).sort()[0]);
+        const tags = getMatches(body, tagRegex).sort();
+
+        if (!bestString || tags[0] < bestString)
+          bestString = tags[0];
 
         linkList.forEach((link) => {
           if (!linksTouched[link]) {
             linksTouched[link] = true;
-            linkCount++;
-            getBest(link);
-          }
+            links.push(link);
+          } 
         });
 
-        if (resolvedCount == linkCount) {
-          resolve(tags.sort()[0])
+        count++;
+        if (count == links.length) {
+          resolve(bestString)
+        } else {
+          getBest(links[count]);
         }
       })
-    } 
+    }
     getBest(url);
   });
