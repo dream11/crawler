@@ -12,7 +12,8 @@
 
 // Solution by Abhishek<abhiisheek@hotmail.com> & Nanda Kishore<nandakishorenw@gmail.com>
 
-var cheerioReq = require('cheerio-req');
+// var cheerioReq = require('cheerio-req');
+var request = require('request');
 module.exports = url =>
   new Promise((resolve, reject) => {
     /**
@@ -25,39 +26,41 @@ module.exports = url =>
       lowestStr
     ) {
       return new Promise(function(resolve, reject) {
-        cheerioReq(url, function(error, $) {
+        request(url, function(error, respone, html) {
           if (error) {
             resolve(lowestStr);
           }
-          $('a').each((index, item) => {
-            const itemUrl = $(item).attr('href');
-            if (!urlFragmentsMap[itemUrl]) {
-              urlFragmentsMap[itemUrl] = itemUrl;
-              urlFragments.push(itemUrl);
-            }
-          });
 
-          $('.codes h1').each((index, item) => {
-            lowestStr = extractLowestStr(lowestStr, $(item).text());
-          });
+          const h1Tags = html.match(/<h1>(.*?)<\/h1>/g);
+          h1Tags &&
+            h1Tags.forEach(thisTag => {
+              const text = thisTag.slice(4, thisTag.indexOf('</'));
+              if (lowestStr > text) {
+                lowestStr = text;
+              }
+            });
+
+          const aTags = html.match(/href="(.*?)"/g);
+          aTags &&
+            aTags.forEach((el, i) => {
+              if (i === 0) {
+                return;
+              }
+              const link = el.slice(6, -1);
+              if (!urlFragmentsMap[link]) {
+                urlFragmentsMap[link] = link;
+                urlFragments.push(link);
+              }
+            });
           resolve(lowestStr);
         });
       });
     }
 
-    function extractLowestStr(lowest, curr) {
-      if (!lowest) {
-        lowest = curr;
-        extractLowestStr = (lowest, curr) => (lowest > curr ? curr : lowest);
-        return lowest;
-      }
-      return lowest > curr ? curr : lowest;
-    }
-
     (async url => {
       var toVisitFramgemts = [''];
       var toVisitFramgmentsMap = {};
-      var resultStr;
+      var resultStr = 'zzzzzzzzzzzzzzzzzz';
       for (let i = 0; i < toVisitFramgemts.length; i++) {
         resultStr = await getLowestStringFromURL(
           url + toVisitFramgemts[i],
