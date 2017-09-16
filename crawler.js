@@ -81,7 +81,7 @@ const loopCrawler = async (cb,url) => {
                 finishFunction(cb);
             }*/
             if(responseCount>200 && responseCount >= linksArr.length && (count+1)>=linksArr.length){
-            	console.log("===========================================calling finish")
+            	//console.log("===========================================calling finish")
             	finishFunction(cb);	
             }
             if (err) {
@@ -93,9 +93,9 @@ const loopCrawler = async (cb,url) => {
 
             
             loopCrawler(cb,linksArr[count]);
-            if(count<50 /*&& count < 200*/){
+            /*if(count<100 || (count > 500)){
             	loopCrawler(cb,linksArr[count+1]);
-            }
+            }*/
             /*if(count<150 || (count > 500 && count < 800) ){
             	loopCrawler(cb,linksArr[count+1]);
             	//loopCrawler(cb,linksArr[count+2]);
