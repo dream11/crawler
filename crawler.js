@@ -66,9 +66,9 @@ let minStr = null;
 module.exports = url =>
   new Promise((resolve, reject) => {
     const crawlerInst = new nodeCrawler({
-      maxConnections: 68,
+      maxConnections: 70,
       skipDuplicates: true,
-      retryTimeout: 1000,
+      retryTimeout: 100,
       callback: (error, res, done) => {
         if (error) {
           console.error(error);
