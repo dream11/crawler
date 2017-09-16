@@ -31,7 +31,6 @@ const getMatches = (str, regex) => {
 module.exports = url =>
   new Promise((resolve, reject) => {
 
-    const startTime = new Date();
     let tags = [url];
     const baseURL = url;
     let linkCount = 1;
@@ -42,14 +41,13 @@ module.exports = url =>
 
     const getBest = async (url) => {
       request(url, (error, response, body) => {
-
-        let endTime = new Date();
-        resolvedCount++;
         if(error) {
           getBest(url);
+          return;
         }
+        resolvedCount++;
         const linkList = getMatches(body, linkRegex).map(link => link.substr(0, 1) == '/' ? baseURL + link : link);
-        tags.push(...getMatches(body, tagRegex));
+        tags.push(getMatches(body, tagRegex).sort()[0]);
 
         linkList.forEach((link) => {
           if (!linksTouched[link]) {
