@@ -18,12 +18,11 @@ module.exports = url =>
 
    var baseURL = url
    var linksCount = 0
-   var resolvesCounts = 0
    var bestString = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
    var linksTouched = {}
+   var allLinks = []
 
-   var getBest = function (url){
-     linksCount++
+   var getBest = async function (url){
      request(url, function(error, response, body) {
         if(error) {
         }
@@ -39,14 +38,19 @@ module.exports = url =>
              var links = $('a');
              $(links).each(function(i, link){
                if(!linksTouched[$(link).attr('href')]){
+                 allLinks.push(baseURL + $(link).attr('href'))
                  linksTouched[$(link).attr('href')] = true
-                 getBest(baseURL + $(link).attr('href'))
                }
              });
-         }
-         resolvesCounts++
-         if(linksCount == resolvesCounts){
-           resolve(bestString)
+
+             if(allLinks.length == linksCount){
+               console.log(allLinks.length)
+               resolve(bestString)
+             }
+             else{
+               getBest(allLinks[linksCount])
+               linksCount++
+             }
          }
      });
    }
