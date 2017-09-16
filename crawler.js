@@ -69,7 +69,7 @@ async function crawl(url) {
   visitedLinks = [];
 
   let crawledStrings = await getData(url).catch(err => console.log(err));
-  console.log('crawledStrings', crawledStrings);
+  // console.log('crawledStrings', crawledStrings);
 
   const result = crawledStrings.sort()[0];
   console.log('result', result);
