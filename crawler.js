@@ -1,18 +1,59 @@
-/**
- * Created by tushar on 13/09/17.
- */
+'use strict';
 
-'use strict'
+let request = require('request'),
+	cheerio = require('cheerio');
 
-/**
- * Crawls a website using a start {url}, and returns the lexicographically smallest string.
- * @param url
- * @return {Promise.<string>}
- */
 module.exports = url =>
-  new Promise((resolve, reject) => {
-    /**
-     * TODO: Write your high performance code here.
-     */
-    reject(new Error('NotImplemented'))
-  })
+	new Promise((resolve, reject) => {
+		let codes = [],
+			links = [],
+			visited = {},
+			inProgress = [],
+			retry = {},
+			dispatcher = () => {
+				if(links.length === 0) {
+					resolve(codes.sort()[0])
+				} else {
+					let pop = links.pop();
+
+					if (!(pop in visited)) {
+						crawl(pop);
+					}
+				}
+			},
+			crawl = async function (geturl){
+
+				request(geturl, function(error, response, body) {
+					if(error || !response) {
+						console.log("Error: " + error, geturl);
+						crawl(geturl);
+					}else if (!('statusCode' in response)){
+						console.log("no response: ", geturl);
+						//dispatcher();
+						crawl(geturl);
+					}else if(response.statusCode === 200) {
+						visited[geturl] = true;
+
+						let $ = cheerio.load(body);
+
+						$('.codes h1').each(function(i, code){
+							codes.push($(code).text());
+						});
+
+						$('.link').each(function(i, link){
+							var href = url + $(link).attr('href');
+							if(!visited[href] && links.indexOf(href) === -1){
+								links.push(href);
+							}
+						});
+
+						dispatcher();
+					} else {
+						//console.log("something else happened here", body);
+						crawl(geturl);
+					}
+				});
+			};
+
+		crawl(url);
+	});
