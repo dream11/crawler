@@ -1,4 +1,4 @@
-const throttle = require('./throttle')
+const { resetLimits, throttle } = require('./throttle')
 const { get } = require('axios')
 
 const parsePage = (page) => {
@@ -30,6 +30,7 @@ module.exports = startUrl => new Promise((resolve) => {
 
   let result
   // let count = 0
+  resetLimits(true)
 
   const processUrl = (url) => new Promise((resolve, reject) => {
     if (parsedPages[url]) { resolve(); return }
