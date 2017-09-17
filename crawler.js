@@ -46,7 +46,10 @@ module.exports = startUrl => new Promise((resolve) => {
       Promise
         .all(urls.filter(url => !parsedPages[url]).map(processUrl))
         .then(i => resolve())
-    }).catch(i => processUrl(url).then(i => resolve())))
+    }).catch(i => {
+      parsedPages[url] = false
+      processUrl(url, false).then(i => resolve())
+    }))
   })
 
   processUrl('').then(i => resolve(result))
