@@ -10,44 +10,47 @@
  * @return {Promise.<string>}
  */
 
-var Crawler = require("crawler");
+var request = require('request');
+var cheerio = require('cheerio');
 
 module.exports = url =>
  new Promise((resolve, reject) => {
 
    var baseURL = url
+   var linksCount = 0
+   var linksResolved = 0
    var bestString = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
    var linksTouched = {}
 
-   var c = new Crawler({
-      maxConnections: 70,
-      retryTimeout: 1000,
-      retries: 10,
-      callback: (error, res, done) => {
-        if (error) {
-          return;
-        } else {
-          var $ = res.$;
-          var h1 = $('h1');
-          $(h1).each(function(i, link){
-            if(bestString > $(link).text()){
-              bestString = $(link).text();
-            }
-          });
-
-          var links = $('a');
-          $(links).each(function(i, link){
-            if(!linksTouched[$(link).attr('href')]){
-              c.queue(baseURL + $(link).attr('href'))
-              linksTouched[$(link).attr('href')] = true
-            }
-          });
+   var getBest = async function (url){
+     linksCount++
+     request(url, function(error, response, body) {
+        if(error) {
+          // console.log(url + " - " + linksCount + " - " + linksResolved)
         }
-        done();
-      },
-    });
-    c.queue(url);
-    c.on("drain", () => {
-      resolve(bestString);
-    });
-  });
+        else if(response.statusCode === 200) {
+             var $ = cheerio.load(body);
+             var h1 = $('h1');
+             $(h1).each(function(i, link){
+               if(bestString > $(link).text()){
+                 bestString = $(link).text();
+               }
+             });
+
+             var links = $('a');
+             $(links).each(function(i, link){
+               if(!linksTouched[$(link).attr('href')]){
+                 linksTouched[$(link).attr('href')] = true
+                 getBest(baseURL + $(link).attr('href'))
+               }
+             });
+         }
+         linksResolved++
+        //  console.log(url + " - " + linksCount + " - " + linksResolved)
+         if(linksResolved == linksCount){
+           resolve(bestString)
+         }
+     });
+   }
+   getBest(url)
+})
