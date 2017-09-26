@@ -1,0 +1,6 @@
+version: 0.0
+os: linux
+hooks:
+  ApplicationStart:
+    - location: npm start
+      timeout: 3600
