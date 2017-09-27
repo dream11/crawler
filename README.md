@@ -2,7 +2,6 @@
   - [Problem Statement](#problem-statement)
   - [Project Setup](#project-setup)
   - [Judging Criteria](#judging-criteria)
-  - [Solution](#solution)
   - [FAQ](#faq)
 
 # Problem Statement
@@ -113,9 +112,6 @@ The team would be glad to assist you in setting up the project on your computer.
 
 # Judging Criteria
 Once your tests pass you should submit a pull request with your solution. Each pull request will be executed on travis to compute the run time of your logic. If a pull request is found that uses any form of plagiarism or uses hard coded results, you will be disqualified. In the end, if your solution has the least run time, you win!
-
-# Solution
-Like seriously??
 
 # FAQ
 
