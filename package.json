@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "start": "nodemon server.js start"
+    "start": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +14,10 @@
     "express-rate-limit": "^2.9.0",
     "mocha": "^3.5.3",
     "nodemon": "^1.12.0",
-    "pug": "^2.0.0-rc.4"
+    "pug": "^2.0.0-rc.4",
+    "cheerio": "^0.19.0",
+    "url-parse": "^1.0.5",
+    "request": "^2.65.0",
+    "promise-defer": "^1.0.0"
   }
 }
