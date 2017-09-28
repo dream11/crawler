@@ -1,15 +1,16 @@
 sudo: false
-language: node_js
-cache:
-  yarn: true
-  directories:
-    - node_modules
-notifications:
-  email: false
-node_js:
-  - 'stable'
+language:
+  - python
+  - node_js
 before_script:
-  - npm test
-branches:
-  except:
-    - /^v\d+\.\d+\.\d+$/
+  - npm install
+python:
+  - 3.5
+install:
+  - pip install -r requirements.txt
+scripts:
+  - cd dream11/
+  - scripyd &
+  - cd ..
+  - npm start &
+  - curl http://localhost:6800/schedule.json -d project=default -d spider=linkspider
