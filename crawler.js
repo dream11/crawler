@@ -1,18 +1,57 @@
-/**
- * Created by tushar on 13/09/17.
- */
+const { resetLimits, throttle } = require('./throttle')
+const { get } = require('axios')
 
-'use strict'
+const parsePage = (page) => {
+  page = page.slice(264, -96)
 
-/**
- * Crawls a website using a start {url}, and returns the lexicographically smallest string.
- * @param url
- * @return {Promise.<string>}
- */
-module.exports = url =>
-  new Promise((resolve, reject) => {
-    /**
-     * TODO: Write your high performance code here.
-     */
-    reject(new Error('NotImplemented'))
+  let code
+  let urls = []
+
+  while (page.slice(-5) === '</h1>') {
+    let currentCode = page.slice(-11, -5)
+
+    code = code < currentCode ? code : currentCode
+
+    page = page.slice(0, -15)
+  }
+
+  while (page[1] !== '/') {
+    urls.push(page.slice(39, 72))
+
+    page = page.slice(88)
+  }
+
+  return { urls, code }
+}
+
+module.exports = startUrl => new Promise((resolve) => {
+  const domain = startUrl
+  const parsedPages = {}
+
+  let result
+  // let count = 0
+  resetLimits(true)
+
+  const processUrl = (url) => new Promise((resolve, reject) => {
+    if (parsedPages[url]) { resolve(); return }
+
+    parsedPages[url] = true
+
+    throttle(() => get(`${domain}${url}`).then(({ data }) => {
+      const { urls, code } = parsePage(data)
+
+      result = code ? (result < code ? result : code) : result
+
+      // console.log(result, url, code, count++)
+
+      Promise
+        .all(urls.filter(url => !parsedPages[url]).map(processUrl))
+        .then(i => resolve())
+    }).catch(i => {
+      parsedPages[url] = false
+      processUrl(url, false).then(i => resolve())
+    }))
   })
+
+  processUrl('').then(i => resolve(result))
+})
