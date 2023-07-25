@@ -121,5 +121,5 @@ Once your tests pass you should submit a pull request with your solution. Each p
 - **Can we libraries?**
   Sure go ahead!
 
-Please don't hesitate to get in touch with the team or shoot us a query directly on [@d11engg](https://twitter.com/D11Engg).
+Please don't hesitate to get in touch with the team or shoot us a query directly on [@dream11engg](https://twitter.com/dream11engg).
 - **Can we use libraries?**
